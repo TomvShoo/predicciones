@@ -48,9 +48,7 @@ export const Prediccion = () => {
     const {formulario, handleChange } = useForm({evaporacion:'',sunshine:'',temp3pm:'', ciudad:''})
     const [ciudades, setCiudades] = useState([])
 
-    const evaporacion = ""
-    const sunshine = ""
-    const temp3pm = ""
+    
 
     const cargarCiudades = async () => {
         const res = await api.get('/ciudades')
