@@ -1,2 +1,6 @@
 export * from './Prediccion'
 export * from './Graficos'
+export * from './ValoresNulos'
+export * from './GTemperaturaAnio'
+export * from './GVelocidadViento'
+export * from './GComparacion'
