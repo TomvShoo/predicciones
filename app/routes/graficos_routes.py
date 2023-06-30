@@ -7,17 +7,26 @@ from app.routes import graficos_bp
 def valores_nulos():
     df = pd.read_csv(os.path.join(os.getcwd(),'weatherAUS.csv'))
     data = []
+    columnas = []
+    valores = []
     for feature in df.columns:
         # print('Total de valores nulos de', feature, '=', df[feature].isna().sum())
+        columnas.append(feature)
+        valores.append(df[feature].isna().sum().item())
         
         data.append({
             "column":feature,
             "value":df[feature].isna().sum().item()
             })
-        
+       
+    
+    prueba = {
+        "columnas":columnas,
+        "valores":valores
+    }
     return jsonify({
         "success":True,
-        "data":data
+        "data":prueba
     })
     
 @graficos_bp.route('/temperatura_anio', methods=["POST"])
