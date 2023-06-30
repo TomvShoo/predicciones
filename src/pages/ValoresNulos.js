@@ -15,8 +15,9 @@ const [loading, setLoading] = useState(true)
 
   const cargarDatos = async () => {
     const res = (await graficosApi.get('/valores_nulos')).data;
-    const {columnas, valores} = res.data
-
+    const columnas = res.data.map(x => x.column)
+    const valores = res.data.map(x => x.value)
+    
     const datos = {
       // labels: res.data.map((res) => res.column),
       labels: columnas.map(v => v),
