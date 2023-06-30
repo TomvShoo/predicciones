@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from 'primereact/dropdown';
-        
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { api, graficosApi } from "../api/api";
 import { Container } from "../components";
 
@@ -19,6 +19,7 @@ const IntputContainer = styled.div`
 `
 
 export const GTemperaturaAnio = () => {
+  const [loading, setLoading] = useState(true)
   const {formulario, handleChange, setFormulario} = useForm({anio1:2018,anio2:2019,anio3:2021,anio4:2022, ciudad:'Sydney'})
   const [ciudades, setCiudades] = useState([])
   const [years, setYears] = useState([])
@@ -32,6 +33,7 @@ export const GTemperaturaAnio = () => {
   }
 
   const cargarDatos = async (documentStyle) => {
+    setLoading(true)
     
     const res = await graficosApi.post("/temperatura_anio",{...formulario});
     const { data } = res.data;
@@ -79,7 +81,7 @@ export const GTemperaturaAnio = () => {
     };
 
     setChartData(dataGrafico);
-
+    setLoading(false)
   };
 
   const cargarCiudades = async () => {
@@ -141,14 +143,18 @@ export const GTemperaturaAnio = () => {
     <Container>
       <IntputContainer>
         <div style={{width:'100%', display:'flex',justifyContent:'center'}}>
-        <Dropdown style={{width:'50%'}} name="ciudad" options={ciudades} onChange={handleChange} value={formulario.ciudad}/>
+        <Dropdown disabled={loading} style={{width:'50%',height:'45px'}} name="ciudad" options={ciudades} onChange={handleChange} value={formulario.ciudad}/>
         </div>
-        <Dropdown style={{width:'150px'}} name="anio1" onChange={handleChange} options={years} value={formulario.anio1}/>
-        <Dropdown style={{width:'150px'}} name="anio2" onChange={handleChange} options={years} value={formulario.anio2}/>
-        <Dropdown style={{width:'150px'}} name="anio3" onChange={handleChange} options={years} value={formulario.anio3}/>
-        <Dropdown style={{width:'150px'}} name="anio4" onChange={handleChange} options={years} value={formulario.anio4}/>
+        <Dropdown disabled={loading} style={{width:'150px',height:'45px'}} name="anio1" onChange={handleChange} options={years} value={formulario.anio1}/>
+        <Dropdown disabled={loading} style={{width:'150px',height:'45px'}} name="anio2" onChange={handleChange} options={years} value={formulario.anio2}/>
+        <Dropdown disabled={loading} style={{width:'150px',height:'45px'}} name="anio3" onChange={handleChange} options={years} value={formulario.anio3}/>
+        <Dropdown disabled={loading} style={{width:'150px',height:'45px'}} name="anio4" onChange={handleChange} options={years} value={formulario.anio4}/>
       </IntputContainer>
-      <Chart style={{width:'100%'}} type="line" data={chartData} options={chartOptions} />
+
+      {loading
+      ?<ProgressSpinner/>
+      :<Chart style={{width:'100%'}} type="line" data={chartData} options={chartOptions} />
+      }
     </Container>
   );
 };

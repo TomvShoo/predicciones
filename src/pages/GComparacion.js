@@ -4,6 +4,7 @@ import { Chart } from "primereact/chart";
 import { useForm } from "../hooks/useForm";
 import styled from "styled-components";
 import { Dropdown } from "primereact/dropdown";
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { api, graficosApi } from "../api/api";
 
 const InputContainer = styled.div`
@@ -15,6 +16,8 @@ const InputContainer = styled.div`
 `;
 
 export const GComparacion = () => {
+  const [loading, setLoading] = useState(true)
+
   const [variables, setVariables] = useState([
     "Humedad",
     "Viento",
@@ -75,6 +78,7 @@ export const GComparacion = () => {
   };
 
   const cargarGrafico = async () => {
+    setLoading(true)
     const res = await graficosApi.post("/comparacion", { ...formulario });
     const { data } = res.data;
     const keys = Object.keys(data)
@@ -117,7 +121,7 @@ export const GComparacion = () => {
     };
 
     setChartData(datos);
-    console.log(formulario);
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -132,7 +136,8 @@ export const GComparacion = () => {
     <Container>
       <InputContainer>
         <Dropdown
-          style={{ width: "250px" }}
+          disabled={loading}
+          style={{ width: "250px",height:'45px' }}
           options={variables}
           placeholder="Selecione una variable"
           name="variable1"
@@ -140,7 +145,8 @@ export const GComparacion = () => {
           value={formulario.variable1}
         />
         <Dropdown
-          style={{ width: "250px" }}
+          disabled={loading}
+          style={{ width: "250px",height:'45px' }}
           options={variables}
           placeholder="Selecione una variable"
           name="variable2"
@@ -148,12 +154,15 @@ export const GComparacion = () => {
           value={formulario.variable2}
         />
       </InputContainer>
-      <Chart
+      {loading
+      ?<ProgressSpinner/>
+      :<Chart
         style={{ width: "100%" }}
         type="bar"
         data={chartData}
         options={chartOptions}
       />
+      }
     </Container>
   );
 };

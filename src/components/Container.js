@@ -6,4 +6,6 @@ export const Container = styled.div`
     display: flex !important;
     flex-flow: row wrap;
     border: 1px solid rgb(0,0,0,0.15);
+    justify-content:center;
+    min-height:350px;
 `

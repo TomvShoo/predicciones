@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useForm } from "../hooks/useForm"
 import { api, graficosApi } from "../api/api"
 import styled from "styled-components"
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dropdown } from "primereact/dropdown"
 
 const InputContainer = styled.div`
@@ -15,6 +16,7 @@ const InputContainer = styled.div`
 `
 
 export const GVelocidadViento = () => {
+    const [loading, setLoading] = useState(true)
     const {formulario, handleChange } = useForm({ciudad:'Sydney',anio:2022})
     const [chartData, setChartData] = useState({})
     const [ciudades, setCiudades] = useState([])
@@ -22,6 +24,7 @@ export const GVelocidadViento = () => {
 
 
     const cargarDatos = async () => {
+        setLoading(true)
         const res = await graficosApi.post('/velocidad_viento',formulario)
         const {data:respuesta} = res
         const {data} = respuesta
@@ -54,6 +57,7 @@ export const GVelocidadViento = () => {
         }
 
         setChartData(datos)
+        setLoading(false)
     }
 
     const cargarCiudades = async () => {
@@ -77,10 +81,14 @@ export const GVelocidadViento = () => {
   return (
     <Container>
         <InputContainer>
-            <Dropdown style={{width:'200px'}} options={ciudades} placeholder="Selecione una ciudad" name="ciudad" onChange={handleChange} value={formulario.ciudad}/>
-            <Dropdown style={{width:'200px'}} options={anios} placeholder="Selecione un año" name="anio" onChange={handleChange} value={formulario.anio}/>
+            <Dropdown disabled={loading} style={{width:'200px',height:'45px'}} options={ciudades} placeholder="Selecione una ciudad" name="ciudad" onChange={handleChange} value={formulario.ciudad}/>
+            <Dropdown disabled={loading} style={{width:'200px',height:'45px'}} options={anios} placeholder="Selecione un año" name="anio" onChange={handleChange} value={formulario.anio}/>
         </InputContainer>
-        <Chart style={{width:'100%'}} type="bar" data={chartData}/>
+
+        {loading
+        ?<ProgressSpinner/>
+        :<Chart style={{width:'100%'}} type="bar" data={chartData}/>}
+        
     </Container>
   )
 }
