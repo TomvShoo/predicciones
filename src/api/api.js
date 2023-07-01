@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const graficosApi = axios.create({
-    baseURL:'http://127.0.0.1:5000/graficos'
+    baseURL:'https://apipredicciones.onrender.com/graficos'
 })
 
 export const api = axios.create({
-    baseURL:'http://127.0.0.1:5000'
+    baseURL:'https://apipredicciones.onrender.com'
 })
 
 export const prediccionApi = axios.create({
-    baseURL:'http://127.0.0.1:5000/predicciones'
+    baseURL:'https://apipredicciones.onrender.com/predicciones'
 })
